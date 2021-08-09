@@ -1,57 +1,35 @@
-//========== html разметка ==========
+class CountdownTimer {
+  constructor ({selector, targetDate}) {
+    this.selector = selector;
+    this.targetDate = targetDate;
+    this.setTimer = this.setTimer.bind(this);
+  }
 
-<div class="timer" id="timer-1">
-  <div class="field">
-    <span class="value" data-value="days">11</span>
-    <span class="label">Days</span>
-  </div>
+  setTimer() {
+    let targetDate = this.targetDate;
+    let selector = this.selector;
+    const date = function () {
+      let currentDay = Date.now();
+      let time = targetDate.getTime() - currentDay;
+      const days = String(Math.floor(time / (1000 * 60 * 60 * 24))).padStart(2,'0');
+      const hours = String(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2,'0');
+      const mins = String(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60))).padStart(2,'0');
+      const secs = String(Math.floor((time % (1000 * 60)) / 1000)).padStart(2,'0'); 
 
-  <div class="field">
-    <span class="value" data-value="hours">11</span>
-    <span class="label">Hours</span>
-  </div>
+      const wrap = document.querySelector(`${selector}`)
+      wrap.querySelector('[data-value="days"]').textContent = `${days}`;
+      wrap.querySelector('[data-value="hours"]').textContent = `${hours}`;
+      wrap.querySelector('[data-value="mins"]').textContent = `${mins}`;
+      wrap.querySelector('[data-value="secs"]').textContent = `${secs}`;
+    }
 
-  <div class="field">
-    <span class="value" data-value="mins">11</span>
-    <span class="label">Minutes</span>
-  </div>
+    setInterval(date, 1000);
+  }
+}
 
-  <div class="field">
-    <span class="value" data-value="secs">11</span>
-    <span class="label">Seconds</span>
-  </div>
-</div>
-
-//========== Таймер с настройками ==========
-
-new CountdownTimer({
+const timer = new CountdownTimer({
   selector: '#timer-1',
-  targetDate: new Date('Jul 17, 2019'), //! Поменять дату 
+  targetDate: new Date('Oct 31, 2021'),
 });
 
-//========== Формулы для подсчета значений ==========
-
-/*
- * Оставшиеся дни: делим значение UTC на 1000 * 60 * 60 * 24, количество
- * миллисекунд в одном дне (миллисекунды * секунды * минуты * часы)
- */
-const days = Math.floor(time / (1000 * 60 * 60 * 24));
-
-/*
- * Оставшиеся часы: получаем остаток от предыдущего расчета с помощью оператора
- * остатка % и делим его на количество миллисекунд в одном часе
- * (1000 * 60 * 60 = миллисекунды * минуты * секунды)
- */
-const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-/*
- * Оставшиеся минуты: получаем оставшиеся минуты и делим их на количество
- * миллисекунд в одной минуте (1000 * 60 = миллисекунды * секунды)
- */
-const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-
-/*
- * Оставшиеся секунды: получаем оставшиеся секунды и делим их на количество
- * миллисекунд в одной секунде (1000)
- */
-const secs = Math.floor((time % (1000 * 60)) / 1000); 
+timer.setTimer();

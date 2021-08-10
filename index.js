@@ -3,6 +3,7 @@ class CountdownTimer {
     this.selector = selector;
     this.targetDate = targetDate;
     this.setTimer = this.setTimer.bind(this);
+    this.interval = null;
   }
 
   setTimer() {
@@ -11,6 +12,10 @@ class CountdownTimer {
     const date = function () {
       let currentDay = Date.now();
       let time = targetDate.getTime() - currentDay;
+      if (time < 0) {
+        time = 0;
+        clearInterval(intervalId);
+      }
       const days = String(Math.floor(time / (1000 * 60 * 60 * 24))).padStart(2,'0');
       const hours = String(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2,'0');
       const mins = String(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60))).padStart(2,'0');

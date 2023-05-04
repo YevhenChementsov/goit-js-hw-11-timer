@@ -34,7 +34,7 @@ class CountdownTimer {
 
 const timer = new CountdownTimer({
   selector: '#timer-1',
-  targetDate: new Date('Oct 31, 2021'),
+  targetDate: new Date(`Oct 31, ${new Date().getUTCFullYear()}`),
 });
 
 timer.setTimer();
